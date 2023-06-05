@@ -2,8 +2,8 @@ import 'package:bloc/bloc.dart';
 
 import '../../../routing/app_router.dart';
 
-class AppNavigationBarBloc extends Cubit<int> {
-  AppNavigationBarBloc() : super(0);
+class AppNavigationBarCubit extends Cubit<int> {
+  AppNavigationBarCubit() : super(0);
   void onItemTapped(int value) => emit(value);
 
   void getRoute(int state, void Function(String route) goRoute) {

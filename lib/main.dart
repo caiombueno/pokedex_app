@@ -10,6 +10,7 @@ void main() {
   usePathUrlStrategy();
   // * https://docs.flutter.dev/testing/errors
   registerErrorHandlers();
+
   // * Entry point of the app
   runApp(const PokedexApp());
 }

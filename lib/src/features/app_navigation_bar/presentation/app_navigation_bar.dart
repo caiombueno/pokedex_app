@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import '../application/app_navigation_bar_bloc.dart';
+import '../application/app_navigation_bar_cubit.dart';
 
 class AppNavigationBar extends StatelessWidget {
   const AppNavigationBar({
@@ -11,13 +11,13 @@ class AppNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appNavigationBarBloc = AppNavigationBarBloc();
+    final appNavigationBarBloc = AppNavigationBarCubit();
     final screenHeight = MediaQuery.of(context).size.height;
     // add responsiveness to bottom navigation size
     final responsiveAppNavigationHeight =
         screenHeight >= 660 ? screenHeight / 12 : 80.0;
 
-    return BlocConsumer<AppNavigationBarBloc, int>(
+    return BlocConsumer<AppNavigationBarCubit, int>(
       bloc: appNavigationBarBloc,
       listener: (context, state) {
         appNavigationBarBloc.getRoute(state, context.goNamed);

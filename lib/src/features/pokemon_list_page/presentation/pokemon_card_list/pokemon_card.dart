@@ -44,6 +44,7 @@ class PokemonCard extends StatelessWidget {
       width: 230,
       height: 150,
       child: Card(
+        clipBehavior: Clip.antiAlias,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16.0),
         ),
@@ -51,12 +52,13 @@ class PokemonCard extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.only(
             top: 12.0,
-            left: 12.0,
+            left: 8.0,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              // pokemonName and pokemonId
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -73,12 +75,14 @@ class PokemonCard extends StatelessWidget {
                   ),
                 ],
               ),
+
+              // pokemonTypeBadges and sprite
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 12.0),
+                    padding: const EdgeInsets.only(bottom: 10.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,13 +97,11 @@ class PokemonCard extends StatelessWidget {
                     ),
                   ),
                   Stack(
+                    alignment: AlignmentDirectional.bottomEnd,
+                    fit: StackFit.passthrough,
                     children: [
-                      buildCardPokeball(),
-                      SizedBox(
-                        width: 100,
-                        height: 100,
-                        child: sprite,
-                      ),
+                      buildCardPokeball(size: 80),
+                      SizedBox(width: 90.0, child: sprite),
                     ],
                   ),
                 ],
@@ -111,13 +113,13 @@ class PokemonCard extends StatelessWidget {
     );
   }
 
-  Widget buildCardPokeball() {
+  Widget buildCardPokeball({required double size}) {
     final AssetBytesLoader assetLoader =
         LocalSVGRepository.getCardPokeballAssetLoader();
     return SvgPicture(
       assetLoader,
-      width: 100,
-      height: 100,
+      width: size,
+      height: size,
     );
   }
 }

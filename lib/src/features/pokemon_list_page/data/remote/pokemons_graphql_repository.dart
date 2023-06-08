@@ -11,10 +11,11 @@ class PokemonGraphQLRepository {
     _pokeAPI = PokeAPI();
   }
 
-  Future<List<PokemonCardData>> fetchPokemonCardsData() async {
+  Future<({List<PokemonCardData> data, bool isLastPage})> fetchPokemonCardsData(
+      {required int pageKey}) async {
     const String query = """
-      query Pokemon_card_data {
-        pokemon_v2_pokemon {
+      query Pokemon_card_data(\$offset: Int, \$limit: Int) {
+        pokemon_v2_pokemon(offset: \$offset, limit: \$limit) {
           id
           name
           pokemon_v2_pokemontypes {
@@ -26,10 +27,16 @@ class PokemonGraphQLRepository {
       }
     """;
 
-    final QueryResult result = await _pokeAPI.makeQuery(query);
+    final QueryResult result = await _pokeAPI.makeQuery(
+      query,
+      {
+        'offset': pageKey * 10,
+        'limit': 10,
+      },
+    );
 
     if (result.hasException) {
-      throw CouldNotQueryDataException(result.exception);
+      throw CouldNotQueryDataException(result.exception!);
     }
 
     final List<PokemonCardData> pokemonCardDataList = [];
@@ -44,14 +51,13 @@ class PokemonGraphQLRepository {
 
     for (var i = 0; i < data.length; i++) {
       final int pokemonId = data[i]?['id'];
+
       final String pokemonName = data[i]['name'];
+
       final List<String> pokemonTypes = [];
-      pokemonTypes.add(
-          data[i]['pokemon_v2_pokemontypes'][0]['pokemon_v2_type']['name']);
-      final hasTwoTypes = data[i]['pokemon_v2_pokemontypes'].length >= 2;
-      if (hasTwoTypes) {
+      for (var j = 0; j < data[i]['pokemon_v2_pokemontypes'].length; j++) {
         pokemonTypes.add(
-            data[i]['pokemon_v2_pokemontypes'][1]['pokemon_v2_type']['name']);
+            data[i]['pokemon_v2_pokemontypes'][j]['pokemon_v2_type']['name']);
       }
 
       assert(pokemonTypes.length <= 2);
@@ -70,6 +76,9 @@ class PokemonGraphQLRepository {
 
       pokemonCardDataList.add(pokemonData.toPokemonCardData());
     }
-    return pokemonCardDataList;
+    return (
+      data: pokemonCardDataList,
+      isLastPage: pokemonCardDataList.last.pokemonId == 10271,
+    );
   }
 }

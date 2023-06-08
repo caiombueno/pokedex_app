@@ -12,8 +12,12 @@ class PokeAPI {
 
   Future<QueryResult<Object?>> makeQuery(
     String query,
+    Map<String, dynamic> variables,
   ) async {
-    QueryOptions options = QueryOptions(document: gql(query));
+    QueryOptions options = QueryOptions(
+      document: gql(query),
+      variables: variables,
+    );
     return await _client.query(options);
   }
 }

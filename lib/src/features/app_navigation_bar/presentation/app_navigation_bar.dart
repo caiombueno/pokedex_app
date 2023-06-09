@@ -12,10 +12,6 @@ class AppNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appNavigationBarBloc = AppNavigationBarCubit();
-    final screenHeight = MediaQuery.of(context).size.height;
-    // add responsiveness to bottom navigation size
-    final responsiveAppNavigationHeight =
-        screenHeight >= 660 ? screenHeight / 12 : 80.0;
 
     return BlocConsumer<AppNavigationBarCubit, int>(
       bloc: appNavigationBarBloc,
@@ -24,7 +20,7 @@ class AppNavigationBar extends StatelessWidget {
       },
       builder: (context, state) {
         return SizedBox(
-          height: responsiveAppNavigationHeight,
+          height: 110.0,
           child: BottomNavigationBar(
             type: BottomNavigationBarType.fixed,
             backgroundColor: Colors.white,

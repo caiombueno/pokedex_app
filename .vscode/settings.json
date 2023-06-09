@@ -1,3 +1,4 @@
 {
-    "dart.sdkPath": "/Users/caio/fvm/versions/stable/bin/cache/dart-sdk"
+    "dart.sdkPath": "/Users/caio/fvm/versions/stable/bin/cache/dart-sdk",
+    "java.configuration.updateBuildConfiguration": "interactive"
 }

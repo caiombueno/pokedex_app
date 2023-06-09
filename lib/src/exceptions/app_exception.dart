@@ -20,5 +20,5 @@ class CouldNotQueryDataException extends AppException {
           'could-not-query-data',
           'Could not query data',
         );
-  final OperationException? data;
+  final OperationException data;
 }

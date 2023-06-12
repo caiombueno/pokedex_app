@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:pokedex_app/src/constants/app_sizes.dart';
 import 'package:pokedex_app/src/exceptions/app_exception.dart';
 import 'package:pokedex_app/src/features/pokemon_list_page/data/remote/poke_api.dart';
 import 'package:pokedex_app/src/features/pokemon_list_page/domain/mutable_record.dart';
@@ -10,12 +11,13 @@ class PokemonGraphQLRepository {
   PokemonGraphQLRepository() {
     _pokeAPI = PokeAPI();
   }
+  bool isLastPage = false;
 
   Future<({List<PokemonCardData> data, bool isLastPage})> fetchPokemonCardsData(
-      {required int pageKey}) async {
+      {required int pageKey, required String searchByName}) async {
     const String query = """
-      query Pokemon_card_data(\$offset: Int, \$limit: Int) {
-        pokemon_v2_pokemon(offset: \$offset, limit: \$limit) {
+      query Pokemon_card_data(\$offset: Int, \$limit: Int, \$where: pokemon_v2_pokemon_bool_exp) {
+        pokemon_v2_pokemon(offset: \$offset, limit: \$limit, where: \$where) {
           id
           name
           pokemon_v2_pokemontypes {
@@ -27,11 +29,16 @@ class PokemonGraphQLRepository {
       }
     """;
 
+    const pageGap = 10;
+
     final QueryResult result = await _pokeAPI.makeQuery(
       query,
       {
-        'offset': pageKey * 10,
-        'limit': 10,
+        'offset': pageKey * pageGap,
+        'limit': searchByName != '' ? null : pageGap,
+        'where': {
+          'name': {"_iregex": searchByName},
+        },
       },
     );
 
@@ -64,6 +71,27 @@ class PokemonGraphQLRepository {
 
       final sprite = Image.network(
         'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/$pokemonId.png',
+        errorBuilder: (context, error, stackTrace) => const SizedBox(
+          width: 10.0,
+          height: 60.0,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.error,
+                size: 20.0,
+              ),
+              gapH4,
+              Text(
+                'Failed to load image',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 12.0,
+                ),
+              ),
+            ],
+          ),
+        ),
       );
 
       pokemonData = (
@@ -76,9 +104,11 @@ class PokemonGraphQLRepository {
 
       pokemonCardDataList.add(pokemonData.toPokemonCardData());
     }
+
     return (
       data: pokemonCardDataList,
-      isLastPage: pokemonCardDataList.last.pokemonId == 10271,
+      isLastPage:
+          pokemonCardDataList.last.pokemonId == 10271 || searchByName != '',
     );
   }
 }

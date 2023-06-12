@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../app_scaffold.dart';
-import '../features/pokemon_list_page/presentation/home_page/home_page_screen.dart';
+import '../features/pokemon_list_page/presentation/home_page/home_page.dart';
 
 enum AppRoute {
   home,
@@ -28,7 +28,7 @@ class AppRouter {
           GoRoute(
             path: '/',
             name: AppRoute.home.name,
-            builder: (context, state) => const HomePageScreen(),
+            builder: (context, state) => const HomePage(),
           ),
           GoRoute(
             path: '/comparator',

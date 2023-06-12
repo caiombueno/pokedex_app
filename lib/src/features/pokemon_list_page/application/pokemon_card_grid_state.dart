@@ -2,18 +2,18 @@ import 'package:pokedex_app/src/features/pokemon_list_page/domain/pokemon_card_d
 
 sealed class PokemonCardGridState {}
 
-class FetchPokemonCardDataLoadingState extends PokemonCardGridState {}
+class LoadingState extends PokemonCardGridState {}
 
-class FetchPokemonCardDataSuccessState extends PokemonCardGridState {
-  FetchPokemonCardDataSuccessState({
-    required this.pokemonCardDataList,
+class FetchCardDataSuccessState extends PokemonCardGridState {
+  FetchCardDataSuccessState({
     required this.isLastPage,
+    required this.pokemonCardDataList,
   });
   final List<PokemonCardData> pokemonCardDataList;
   final bool isLastPage;
 }
 
-class FetchPokemonCardDataFailState extends PokemonCardGridState {
-  FetchPokemonCardDataFailState(this.exception);
+class FetchCardDataFailureState extends PokemonCardGridState {
+  FetchCardDataFailureState(this.exception);
   final dynamic exception;
 }

@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 class HomePageSearchBar extends StatelessWidget {
   const HomePageSearchBar({
     super.key,
+    required this.searchController,
   });
+  final TextEditingController searchController;
 
   @override
   Widget build(BuildContext context) {
@@ -14,6 +16,7 @@ class HomePageSearchBar extends StatelessWidget {
       borderRadius: BorderRadius.circular(16.0),
     );
     return TextField(
+      controller: searchController,
       cursorColor: Colors.black,
       decoration: InputDecoration(
         focusColor: Colors.black,

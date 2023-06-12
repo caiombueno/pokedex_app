@@ -62,9 +62,13 @@ class PokemonCard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _cardText(
-                    pokemonName.capitalizeFirstChar(),
-                    15,
+                  ConstrainedBox(
+                    constraints:
+                        const BoxConstraints(maxWidth: 120, maxHeight: 20),
+                    child: _cardText(
+                      pokemonName.capitalizeFirstChar(),
+                      15,
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(right: 12.0),
@@ -100,7 +104,7 @@ class PokemonCard extends StatelessWidget {
                     alignment: AlignmentDirectional.bottomEnd,
                     fit: StackFit.passthrough,
                     children: [
-                      buildCardPokeball(size: 80),
+                      buildCardPokeball(),
                       SizedBox(width: 90.0, child: sprite),
                     ],
                   ),
@@ -113,13 +117,14 @@ class PokemonCard extends StatelessWidget {
     );
   }
 
-  Widget buildCardPokeball({required double size}) {
+  Widget buildCardPokeball() {
     final AssetBytesLoader assetLoader =
         LocalSVGRepository.getCardPokeballAssetLoader();
-    return SvgPicture(
-      assetLoader,
-      width: size,
-      height: size,
+    return ConstrainedBox(
+      constraints: BoxConstraints(),
+      child: SvgPicture(
+        assetLoader,
+      ),
     );
   }
 }
